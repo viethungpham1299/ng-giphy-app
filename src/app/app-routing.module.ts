@@ -14,7 +14,7 @@ const routes: Routes = [
       { path: 'search/:searchTerm', component: SearchGifsComponent },
     ],
   },
-  { path: 'gif', component: GifDetailComponent },
+  { path: 'gif/:id', component: GifDetailComponent },
   { path: '', redirectTo: '/gifs', pathMatch: 'full' },
 ];
 

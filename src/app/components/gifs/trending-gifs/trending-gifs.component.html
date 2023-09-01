@@ -2,14 +2,16 @@
   <div class="header">
     <h2 style="color: white">Trending GIFs</h2>
   </div>
-  <div class="gifs" infiniteScroll (scrolled)="onScroll()">
+  <div
+    class="gifs"
+    infiniteScroll
+    [infiniteScrollDistance]="distance"
+    [infiniteScrollThrottle]="500"
+    (scrolled)="onScroll()"
+  >
     <div class="gif" *ngFor="let gif of gifs">
-      <a [routerLink]="'/gif'">
-        <img
-          [src]="gif.images.downsized.url"
-          [alt]="gif.title"
-          (click)="setCurrentGIF(gif.id)"
-        />
+      <a (click)="setCurrentGIF(gif.id)">
+        <img [src]="gif.images.downsized.url" [alt]="gif.title" />
       </a>
     </div>
   </div>

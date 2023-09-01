@@ -25,7 +25,7 @@ export class DataService {
       .get(
         `${API.baseUrl}/trending?api_key=${
           environment.giphyApiKey
-        }&limit=20&offset=${offset ? offset : 0}`
+        }&limit=20&offset=${offset ? offset * 20 : 0}`
       )
       .subscribe((response: any) => {
         if (response.data) {
@@ -49,6 +49,7 @@ export class DataService {
 
   // return gifs as an Observable
   getGIFs() {
+    console.log(this.gifs.getValue().length);
     return this.gifs.asObservable();
   }
 

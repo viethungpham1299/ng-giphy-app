@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../../../services/data.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trending-gifs',
@@ -11,10 +12,10 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
   gifs: any[] = [];
   subscription!: Subscription;
   throttle = 500;
-  offset = 0;
+  offset = 1;
   distance = 1;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
     // if (!this.dataService.gifs.getValue().length) {
@@ -24,8 +25,8 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
     this.subscription = this.dataService
       .getGIFs()
       .subscribe((response: any) => {
-        console.log(response);
-        this.gifs = response;
+        this.gifs.push(...response);
+        console.log(this.gifs);
       });
   }
 
@@ -34,14 +35,12 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
   }
 
   setCurrentGIF(gifId: string): void {
+    console.log(gifId);
+    this.router.navigate([`gif/${gifId}`]);
     this.dataService.setCurrentGIF(gifId);
   }
 
-  onScroll(): void {
+  onScroll() {
     this.dataService.getTrendingGifs(++this.offset);
-    this.dataService.getGIFs().subscribe((response: any) => {
-      this.gifs.push(...response);
-      console.log(this.gifs);
-    });
   }
 }
