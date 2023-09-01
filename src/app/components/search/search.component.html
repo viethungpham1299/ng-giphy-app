@@ -1,0 +1,13 @@
+<div class="search">
+  <input
+    type="text"
+    placeholder="Search for GIFs"
+    #gif
+    (keyup.enter)="search(gif.value)"
+    [formControl]="searchTerm"
+  />
+
+  <button type="button" (click)="search(searchTerm.value!)">
+    <i class="fa fa-search"></i>
+  </button>
+</div>
