@@ -12,7 +12,7 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
   gifs: any[] = [];
   subscription!: Subscription;
   throttle = 500;
-  offset = 1;
+  offset = 0;
   distance = 1;
 
   constructor(private dataService: DataService, private router: Router) {}
@@ -21,6 +21,7 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
     // if (!this.dataService.gifs.getValue().length) {
     //   console.log(this.dataService.gifs.getValue());
     // }
+    console.log(this.offset);
     this.dataService.getTrendingGifs();
     this.subscription = this.dataService
       .getGIFs()
@@ -31,13 +32,14 @@ export class TrendingGifsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.dataService.gifs.next([]);
     this.subscription.unsubscribe();
   }
 
   setCurrentGIF(gifId: string): void {
     console.log(gifId);
     this.router.navigate([`gif/${gifId}`]);
-    this.dataService.setCurrentGIF(gifId);
+    // this.dataService.setCurrentGIF(gifId);
   }
 
   onScroll() {

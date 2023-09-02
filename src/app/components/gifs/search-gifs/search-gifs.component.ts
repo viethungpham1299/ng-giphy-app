@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 
@@ -12,10 +12,12 @@ export class SearchGifsComponent implements OnInit, OnDestroy {
   searchTerm = '';
   gifs: any[] = [];
   subscription!: Subscription;
+  offset = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +37,10 @@ export class SearchGifsComponent implements OnInit, OnDestroy {
   }
 
   setCurrentGIF(gifId: string): void {
-    this.dataService.setCurrentGIF(gifId);
+    this.router.navigate([`gif/${gifId}`]);
+  }
+
+  onScroll() {
+    this.dataService.searchGifs(this.searchTerm, ++this.offset);
   }
 }

@@ -1,5 +1,9 @@
 <div class="gif">
-  <img [src]="gif.images.downsized.url" [alt]="gif.title" />
-  <p>Rating: {{ gif.rating }}</p>
-  <p>Username: {{ gif.username }}</p>
+  <img
+    [src]="gif.images.downsized ? gif.images.downsized.url : ''"
+    [alt]="gif.title"
+  />
+  <h2>{{ gif.title }}</h2>
+  <h3>Rating: {{ gif.rating }}</h3>
+  <h3>Username: {{ gif.username }}</h3>
 </div>

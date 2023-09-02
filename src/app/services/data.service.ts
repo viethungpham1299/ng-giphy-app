@@ -35,10 +35,12 @@ export class DataService {
   }
 
   // use GIPHY's search api to fetch new GIF list
-  searchGifs(searchTerm: string) {
+  searchGifs(searchTerm: string, offset?: number) {
     return this.httpClient
       .get(
-        `${API.baseUrl}/search?api_key=${environment.giphyApiKey}&q=${searchTerm}&limit=20`
+        `${API.baseUrl}/search?api_key=${
+          environment.giphyApiKey
+        }&q=${searchTerm}&limit=20&offset=${offset ? offset * 20 : 0}`
       )
       .subscribe((response: any) => {
         if (response.data) {
@@ -59,7 +61,17 @@ export class DataService {
     );
   }
 
-  getCurrentGif() {
+  fetchGIF(gifId: string) {
+    return this.httpClient
+      .get(`${API.baseUrl}/${gifId}?api_key=${environment.giphyApiKey}`)
+      .subscribe((response: any) => {
+        if (response.data) {
+          this.currentGIF.next(response.data);
+        }
+      });
+  }
+
+  getGIF() {
     return this.currentGIF.asObservable();
   }
 
