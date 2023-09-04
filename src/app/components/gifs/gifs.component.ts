@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,8 +16,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./gifs.component.scss'],
 })
 export class GifsComponent implements OnInit, OnDestroy {
+  search = false;
   gifs: any[] = [];
   subscription!: Subscription;
+  throttle = 500;
+  offset = 0;
+  distance = 1;
+  searchTerm = '';
 
   constructor(
     private dataService: DataService,
@@ -18,11 +30,59 @@ export class GifsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    if (!this.route.snapshot.children.length)
-      this.router.navigate(['/gifs/trending']);
-    // if (!this.dataService.getSearch()) this.router.navigate(['/gifs/trending']);
+  onTrending() {
+    this.dataService.getTrendingGifs();
   }
 
-  ngOnDestroy(): void {}
+  onSearch() {}
+
+  ngOnInit(): void {
+    // if (!this.dataService.gifs.getValue().length) {
+    //   console.log(this.dataService.gifs.getValue());
+    // }
+    this.dataService.getSearchTerm().subscribe((value: string) => {
+      this.searchTerm = value;
+    });
+    if (this.router.routerState.snapshot.url.includes('search/')) {
+      this.dataService.setSearch(true);
+    }
+    this.dataService.getSearch().subscribe((searched: boolean) => {
+      this.gifs = [];
+      this.offset = 0;
+      this.search = searched;
+      console.log(this.search);
+      if (!this.search) {
+        this.onTrending();
+      } else {
+        this.onSearch();
+      }
+    });
+    this.subscription = this.dataService
+      .getGIFs()
+      .subscribe((response: any) => {
+        this.gifs.push(...response);
+        console.log(this.gifs);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.dataService.gifs.next([]);
+    this.subscription.unsubscribe();
+    this.dataService.setSearch(false);
+    this.dataService.resetGIFs();
+  }
+
+  setCurrentGIF(gifId: string): void {
+    console.log(gifId);
+    this.router.navigate([`gif/${gifId}`]);
+    // this.dataService.setCurrentGIF(gifId);
+  }
+
+  onScroll() {
+    if (this.search) {
+      this.dataService.searchGifs(this.searchTerm, ++this.offset);
+    } else {
+      this.dataService.getTrendingGifs(++this.offset);
+    }
+  }
 }

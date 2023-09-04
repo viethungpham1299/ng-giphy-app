@@ -13,4 +13,8 @@ export class AppComponent implements AfterViewInit {
       'black';
     this.elementRef.nativeElement.ownerDocument.body.style.textAlign = 'center';
   }
+
+  onSearched(value: any) {
+    console.log(value);
+  }
 }

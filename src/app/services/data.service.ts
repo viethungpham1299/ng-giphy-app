@@ -15,6 +15,7 @@ export class DataService {
   gifs = new BehaviorSubject<any>([]);
   currentGIF = new BehaviorSubject<any>({});
   private search = new BehaviorSubject<boolean>(false);
+  private searchTerm = new BehaviorSubject('');
 
   constructor(private httpClient: HttpClient) {}
 
@@ -34,8 +35,14 @@ export class DataService {
       });
   }
 
+  resetGIFs() {
+    this.gifs.next([]);
+    console.log(this.gifs.getValue());
+  }
+
   // use GIPHY's search api to fetch new GIF list
   searchGifs(searchTerm: string, offset?: number) {
+    this.searchTerm.next(searchTerm);
     return this.httpClient
       .get(
         `${API.baseUrl}/search?api_key=${
@@ -51,7 +58,6 @@ export class DataService {
 
   // return gifs as an Observable
   getGIFs() {
-    console.log(this.gifs.getValue().length);
     return this.gifs.asObservable();
   }
 
@@ -75,10 +81,27 @@ export class DataService {
     return this.currentGIF.asObservable();
   }
 
+  unselectGIF() {
+    this.currentGIF.next({});
+  }
+
   setSearch(searched: boolean) {
     this.search.next(searched);
   }
+
   getSearch() {
-    return this.search.getValue();
+    return this.search.asObservable();
+  }
+
+  setSearchTerm(searchTerm: string) {
+    this.searchTerm.next(searchTerm);
+  }
+
+  resetSearchTerm() {
+    this.searchTerm.next('');
+  }
+
+  getSearchTerm() {
+    return this.searchTerm.asObservable();
   }
 }

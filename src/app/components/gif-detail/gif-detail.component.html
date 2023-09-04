@@ -1,9 +1,9 @@
 <div class="gif">
+  <h2>{{ gif.title }}</h2>
   <img
     [src]="gif.images.downsized ? gif.images.downsized.url : ''"
     [alt]="gif.title"
   />
-  <h2>{{ gif.title }}</h2>
   <h3>Rating: {{ gif.rating }}</h3>
   <h3>Username: {{ gif.username }}</h3>
 </div>

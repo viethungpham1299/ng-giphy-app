@@ -1,1 +1,18 @@
-<router-outlet></router-outlet>
+<div class="container">
+  <div class="header">
+    <h2 *ngIf="!search" style="color: white">Trending GIFs</h2>
+  </div>
+  <div
+    class="gifs"
+    infiniteScroll
+    [infiniteScrollDistance]="distance"
+    [infiniteScrollThrottle]="500"
+    (scrolled)="onScroll()"
+  >
+    <div class="gif" *ngFor="let gif of gifs">
+      <a (click)="setCurrentGIF(gif.id)">
+        <img [src]="gif.images.original.url" [alt]="gif.title" />
+      </a>
+    </div>
+  </div>
+</div>

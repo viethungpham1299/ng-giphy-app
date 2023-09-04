@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -9,21 +9,25 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent {
+  @Output() searched = new EventEmitter<boolean>();
   constructor(private dataService: DataService, private router: Router) {}
 
   searchTerm = new FormControl('');
 
   search(searchTerm: string) {
-    // this.router.navigate(['/gifs']);
-    console.log(this.dataService.getSearch());
+    if (!this.router.routerState.snapshot.url.includes('gifs')) {
+      console.log('navigate');
+      this.router.navigate(['gifs']);
+    }
+    this.dataService.resetGIFs();
     if (searchTerm.trim()) {
       this.dataService.setSearch(true);
-      this.router.navigate([`/gifs/search/${searchTerm}`]);
-      // this.dataService.searchGifs(searchTerm);
+      this.dataService.searchGifs(searchTerm);
     } else {
       this.dataService.setSearch(false);
-      this.router.navigate(['gifs/trending']);
+      // this.router.navigate(['gifs']);
       // this.dataService.getTrendingGifs();
     }
+    this.searchTerm.setValue('');
   }
 }

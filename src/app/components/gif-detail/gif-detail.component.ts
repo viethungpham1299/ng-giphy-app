@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
@@ -8,7 +8,7 @@ import { DataService } from 'src/app/services/data.service';
   templateUrl: './gif-detail.component.html',
   styleUrls: ['./gif-detail.component.scss'],
 })
-export class GifDetailComponent implements OnInit {
+export class GifDetailComponent implements OnInit, OnDestroy {
   gif: any = { id: '', images: { downsized: { url: '' } } };
   subscription!: Subscription;
 
@@ -21,11 +21,17 @@ export class GifDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((value: any) => {
       console.log(value['id']);
-      if (!value['id']) this.router.navigate(['/gifs']);
+      // if (!value['id']) this.router.navigate(['/gifs']);
+      console.log('hi');
       this.dataService.fetchGIF(value['id']);
       this.subscription = this.dataService.getGIF().subscribe((value: any) => {
         this.gif = value;
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.dataService.unselectGIF();
+    this.subscription.unsubscribe();
   }
 }
