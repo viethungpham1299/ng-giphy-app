@@ -7,14 +7,9 @@ const routes: Routes = [
   {
     path: 'gifs',
     component: GifsComponent,
-    // children: [
-    //   { path: 'trending', component: TrendingGifsComponent },
-    //   { path: 'search/:searchTerm', component: SearchGifsComponent },
-    // ],
   },
   { path: 'gif/:id', component: GifDetailComponent },
   { path: '', redirectTo: '/gifs', pathMatch: 'full' },
-  // { path: '**', component: TrendingGifsComponent },
 ];
 
 @NgModule({
