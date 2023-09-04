@@ -9,14 +9,12 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent {
-  @Output() searched = new EventEmitter<boolean>();
   constructor(private dataService: DataService, private router: Router) {}
 
   searchTerm = new FormControl('');
 
   search(searchTerm: string) {
     if (!this.router.routerState.snapshot.url.includes('gifs')) {
-      console.log('navigate');
       this.router.navigate(['gifs']);
     }
     this.dataService.resetGIFs();
@@ -25,8 +23,6 @@ export class SearchComponent {
       this.dataService.searchGifs(searchTerm);
     } else {
       this.dataService.setSearch(false);
-      // this.router.navigate(['gifs']);
-      // this.dataService.getTrendingGifs();
     }
     this.searchTerm.setValue('');
   }

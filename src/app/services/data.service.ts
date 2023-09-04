@@ -37,7 +37,6 @@ export class DataService {
 
   resetGIFs() {
     this.gifs.next([]);
-    console.log(this.gifs.getValue());
   }
 
   // use GIPHY's search api to fetch new GIF list

@@ -34,12 +34,7 @@ export class GifsComponent implements OnInit, OnDestroy {
     this.dataService.getTrendingGifs();
   }
 
-  onSearch() {}
-
   ngOnInit(): void {
-    // if (!this.dataService.gifs.getValue().length) {
-    //   console.log(this.dataService.gifs.getValue());
-    // }
     this.dataService.getSearchTerm().subscribe((value: string) => {
       this.searchTerm = value;
     });
@@ -50,18 +45,14 @@ export class GifsComponent implements OnInit, OnDestroy {
       this.gifs = [];
       this.offset = 0;
       this.search = searched;
-      console.log(this.search);
       if (!this.search) {
         this.onTrending();
-      } else {
-        this.onSearch();
       }
     });
     this.subscription = this.dataService
       .getGIFs()
       .subscribe((response: any) => {
         this.gifs.push(...response);
-        console.log(this.gifs);
       });
   }
 
@@ -73,7 +64,6 @@ export class GifsComponent implements OnInit, OnDestroy {
   }
 
   setCurrentGIF(gifId: string): void {
-    console.log(gifId);
     this.router.navigate([`gif/${gifId}`]);
     // this.dataService.setCurrentGIF(gifId);
   }

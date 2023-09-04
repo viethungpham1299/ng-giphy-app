@@ -20,9 +20,6 @@ export class GifDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.params.subscribe((value: any) => {
-      console.log(value['id']);
-      // if (!value['id']) this.router.navigate(['/gifs']);
-      console.log('hi');
       this.dataService.fetchGIF(value['id']);
       this.subscription = this.dataService.getGIF().subscribe((value: any) => {
         this.gif = value;
