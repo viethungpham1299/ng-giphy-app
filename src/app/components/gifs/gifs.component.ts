@@ -19,6 +19,8 @@ export class GifsComponent implements OnInit, OnDestroy {
   search = false;
   gifs: any[] = [];
   subscription!: Subscription;
+  searchSubscription!: Subscription;
+  searchTermSubscription!: Subscription;
   throttle = 500;
   offset = 0;
   distance = 1;
@@ -35,20 +37,24 @@ export class GifsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dataService.getSearchTerm().subscribe((value: string) => {
-      this.searchTerm = value;
-    });
+    this.searchTermSubscription = this.dataService
+      .getSearchTerm()
+      .subscribe((value: string) => {
+        this.searchTerm = value;
+      });
     if (this.router.routerState.snapshot.url.includes('search/')) {
       this.dataService.setSearch(true);
     }
-    this.dataService.getSearch().subscribe((searched: boolean) => {
-      this.gifs = [];
-      this.offset = 0;
-      this.search = searched;
-      if (!this.search) {
-        this.onTrending();
-      }
-    });
+    this.searchSubscription = this.dataService
+      .getSearch()
+      .subscribe((searched: boolean) => {
+        this.gifs = [];
+        this.offset = 0;
+        this.search = searched;
+        if (!this.search) {
+          this.onTrending();
+        }
+      });
     this.subscription = this.dataService
       .getGIFs()
       .subscribe((response: any) => {
@@ -59,6 +65,8 @@ export class GifsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dataService.gifs.next([]);
     this.subscription.unsubscribe();
+    this.searchSubscription.unsubscribe();
+    this.searchTermSubscription.unsubscribe();
     this.dataService.setSearch(false);
     this.dataService.resetGIFs();
   }
