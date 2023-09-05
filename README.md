@@ -1,7 +1,7 @@
 # NgGiphyApp
 
-This project was generated with [Angular CLI]
-I have spent 3 days working on this project. If I had more time, I would have added a few animations and a loader.
+This project was generated with [Angular CLI].
+I had spent 3 days working on this project. If I had more time, I would have added a few animations and a loader.
 
 ## Development server
 
