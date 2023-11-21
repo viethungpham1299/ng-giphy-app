@@ -12,8 +12,8 @@ enum API {
 })
 export class DataService {
   // GIF list, using BehaviorSubject because we only need the newest list.
-  gifs = new BehaviorSubject<any>([]);
-  currentGIF = new BehaviorSubject<any>({});
+  private gifs = new BehaviorSubject<any>([]);
+  private currentGIF = new BehaviorSubject<any>({});
   private search = new BehaviorSubject<boolean>(false);
   private searchTerm = new BehaviorSubject('');
 
@@ -76,7 +76,7 @@ export class DataService {
       });
   }
 
-  getGIF() {
+  getCurrentGIF() {
     return this.currentGIF.asObservable();
   }
 
@@ -93,6 +93,7 @@ export class DataService {
   }
 
   setSearchTerm(searchTerm: string) {
+    console.log(searchTerm);
     this.searchTerm.next(searchTerm);
   }
 

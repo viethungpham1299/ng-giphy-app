@@ -32,29 +32,26 @@ export class GifsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  onTrending() {
-    this.dataService.getTrendingGifs();
-  }
-
   ngOnInit(): void {
     this.searchTermSubscription = this.dataService
       .getSearchTerm()
       .subscribe((value: string) => {
         this.searchTerm = value;
+        console.log(this.searchTerm);
       });
-    if (this.router.routerState.snapshot.url.includes('search/')) {
-      this.dataService.setSearch(true);
-    }
+
     this.searchSubscription = this.dataService
       .getSearch()
       .subscribe((searched: boolean) => {
         this.gifs = [];
         this.offset = 0;
         this.search = searched;
+        console.log(this.search);
         if (!this.search) {
-          this.onTrending();
+          this.dataService.getTrendingGifs();
         }
       });
+
     this.subscription = this.dataService
       .getGIFs()
       .subscribe((response: any) => {
@@ -63,7 +60,7 @@ export class GifsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.dataService.gifs.next([]);
+    this.dataService.resetGIFs();
     this.subscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.searchTermSubscription.unsubscribe();

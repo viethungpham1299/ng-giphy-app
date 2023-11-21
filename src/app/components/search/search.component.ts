@@ -14,16 +14,20 @@ export class SearchComponent {
   searchTerm = new FormControl('');
 
   search(searchTerm: string) {
+    // If not in gifs page, navigate to 'gifs'
     if (!this.router.routerState.snapshot.url.includes('gifs')) {
       this.router.navigate(['gifs']);
     }
+    // Reset current GIFs to fetch new GIFs
     this.dataService.resetGIFs();
     if (searchTerm.trim()) {
       this.dataService.setSearch(true);
-      this.dataService.searchGifs(searchTerm);
+      this.dataService.searchGifs(this.searchTerm.value!);
+      this.dataService.setSearchTerm(this.searchTerm.value!);
     } else {
       this.dataService.setSearch(false);
+      this.dataService.getTrendingGifs();
     }
-    this.searchTerm.setValue('');
+    // this.searchTerm.setValue('');
   }
 }
